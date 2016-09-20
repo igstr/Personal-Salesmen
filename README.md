@@ -6,4 +6,7 @@ This module let's you assign a customer to a employee. The employee will only se
 If you are logged in as the SuperAdmin you can ofcourse see all the customers and employee's. If you are logged as SuperAdmin you can assign the employee to the customers by assigning them in the on the Orders>Personal Salesmen tab.
 
 Check out the module on the Prestashop forum: https://www.prestashop.com/forums/topic/500473-free-module-personal-salesmen/
+
+
+
 Enjoy the module? Sponsor us a coffee at: www.paypal.me/BuyMeCoffee
