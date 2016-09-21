@@ -58,9 +58,7 @@ class AdminOrdersController extends AdminOrdersControllerCore
             os.`color`,
             IF((SELECT so.id_order FROM `'._DB_PREFIX_.'orders` so WHERE so.id_customer = a.id_customer AND so.id_order < a.id_order LIMIT 1) > 0, 0, 1) as new,
             country_lang.name as cname,
-            IF(a.valid, 1, 0) badge_success,
-            (SELECT so.id_employee FROM `'._DB_PREFIX_.'personalsalesmen` so WHERE so.id_customer = a.id_customer) as personalsales
-            ';
+            IF(a.valid, 1, 0) badge_success';
     
             $this->_join = '
             LEFT JOIN `'._DB_PREFIX_.'customer` c ON (c.`id_customer` = a.`id_customer`)
