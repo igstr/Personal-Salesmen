@@ -23,19 +23,46 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
-
 /**
  * @property Customer $object
  */
 class AdminCustomersController extends AdminCustomersControllerCore
 {
+    /*
+    * module: personalsalesmen
+    * date: 2016-09-21 12:51:48
+    * version: 2.3
+    */
     protected $delete_mode;
-
+    /*
+    * module: personalsalesmen
+    * date: 2016-09-21 12:51:48
+    * version: 2.3
+    */
     protected $_defaultOrderBy = 'date_add';
+    /*
+    * module: personalsalesmen
+    * date: 2016-09-21 12:51:48
+    * version: 2.3
+    */
     protected $_defaultOrderWay = 'DESC';
+    /*
+    * module: personalsalesmen
+    * date: 2016-09-21 12:51:48
+    * version: 2.3
+    */
     protected $can_add_customer = true;
+    /*
+    * module: personalsalesmen
+    * date: 2016-09-21 12:51:48
+    * version: 2.3
+    */
     protected static $meaning_status = array();
-
+    /*
+    * module: personalsalesmen
+    * date: 2016-09-21 12:51:48
+    * version: 2.3
+    */
     public function __construct()
     {
         parent::__construct();
@@ -48,9 +75,7 @@ class AdminCustomersController extends AdminCustomersControllerCore
         $this->lang = false;
         $this->deleted = true;
         $this->explicitSelect = true;
-
         $this->allow_export = true;
-
         $this->addRowAction('edit');
         $this->addRowAction('view');
         $this->addRowAction('delete');
@@ -61,24 +86,18 @@ class AdminCustomersController extends AdminCustomersControllerCore
                 'icon' => 'icon-trash'
             )
         );
-
         $this->context = Context::getContext();
-
         $this->default_form_language = $this->context->language->id;
-
         $titles_array = array();
         $genders = Gender::getGenders($this->context->language->id);
         foreach ($genders as $gender) {
-            /** @var Gender $gender */
+            
             $titles_array[$gender->id_gender] = $gender->name;
         }
-
         global $cookie;
-
         if ($cookie->id_employee == 1)
         {
             $this->_select = '
-            (SELECT so.id_employee FROM `'._DB_PREFIX_.'personalsalesmen` so WHERE so.id_customer = a.id_customer) as personalsales,
             a.date_add, gl.name as title, (
                 SELECT SUM(total_paid_real / conversion_rate)
                 FROM '._DB_PREFIX_.'orders o
@@ -107,7 +126,6 @@ class AdminCustomersController extends AdminCustomersControllerCore
             JOIN `'._DB_PREFIX_.'personalsalesmen` psm ON (psm.`id_employee` = '.$cookie->id_employee.' AND psm.`id_customer` = a.`id_customer`)
             ';
         }
-
         $this->_use_found_rows = false;
         $this->fields_list = array(
             'id_customer' => array(
@@ -133,7 +151,6 @@ class AdminCustomersController extends AdminCustomersControllerCore
                 'title' => $this->l('Email address')
             ),
         );
-
         if (Configuration::get('PS_B2B_ENABLE')) {
             $this->fields_list = array_merge($this->fields_list, array(
                 'company' => array(
@@ -141,7 +158,6 @@ class AdminCustomersController extends AdminCustomersControllerCore
                 ),
             ));
         }
-
         $this->fields_list = array_merge($this->fields_list, array(
             'total_spent' => array(
                 'title' => $this->l('Sales'),
@@ -185,15 +201,11 @@ class AdminCustomersController extends AdminCustomersControllerCore
                 'havingFilter' => true
             )
         ));
-
         $this->shopLinkType = 'shop';
         $this->shopShareDatas = Shop::SHARE_CUSTOMER;
-
-        // Check if we can add a customer
         if (Shop::isFeatureActive() && (Shop::getContext() == Shop::CONTEXT_ALL || Shop::getContext() == Shop::CONTEXT_GROUP)) {
             $this->can_add_customer = false;
         }
-
         self::$meaning_status = array(
             'open' => $this->l('Open'),
             'closed' => $this->l('Closed'),
@@ -202,7 +214,6 @@ class AdminCustomersController extends AdminCustomersControllerCore
         );
         
         AdminController::__construct();
-
     }
    /**
      * add to $this->content the result of Customer::SearchByName
@@ -210,17 +221,24 @@ class AdminCustomersController extends AdminCustomersControllerCore
      *
      * @return void
      */
+    /*
+    * module: personalsalesmen
+    * date: 2016-09-21 12:51:48
+    * version: 2.3
+    */
     public function ajaxProcessSearchCustomers()
     {
         global $cookie;
         $CustRay = array();
-
-        $sql = 'SELECT * FROM '._DB_PREFIX_.'personalsalesmen WHERE id_employee = '.$cookie->id_employee.'';
+        if ($cookie->id_employee == 1){
+            $sql = 'SELECT * FROM '._DB_PREFIX_.'personalsalesmen';
+        }else{
+            $sql = 'SELECT * FROM '._DB_PREFIX_.'personalsalesmen WHERE id_employee = '.$cookie->id_employee.'';
+        }
         if ($Listresults = Db::getInstance()->ExecuteS($sql))
             foreach ($Listresults as $row)
                 array_push($CustRay, $row['id_customer']);
         
-
         if ($cookie->id_employee == 1){
         #if(count($CustRay) > 1){
             $searches = explode(' ', Tools::getValue('customer_search'));
