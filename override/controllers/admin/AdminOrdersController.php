@@ -23,17 +23,28 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
-
-
 /**
  * @property Order $object
  */
 class AdminOrdersController extends AdminOrdersControllerCore
 {
+    /*
+    * module: personalsalesmen
+    * date: 2016-09-21 12:51:48
+    * version: 2.3
+    */
     public $toolbar_title;
-
+    /*
+    * module: personalsalesmen
+    * date: 2016-09-21 12:51:48
+    * version: 2.3
+    */
     protected $statuses_array = array();
-
+    /*
+    * module: personalsalesmen
+    * date: 2016-09-21 12:51:48
+    * version: 2.3
+    */
     public function __construct()
     {
         $this->bootstrap = true;
@@ -45,9 +56,7 @@ class AdminOrdersController extends AdminOrdersControllerCore
         $this->allow_export = true;
         $this->deleted = false;
         $this->context = Context::getContext();
-
         global $cookie;
-
         if ($cookie->id_employee == 1)
         {
             $this->_select = '
@@ -81,8 +90,7 @@ class AdminOrdersController extends AdminOrdersControllerCore
           os.`color`,
           IF((SELECT so.id_order FROM `'._DB_PREFIX_.'orders` so WHERE so.id_customer = a.id_customer AND so.id_order < a.id_order LIMIT 1) > 0, 0, 1) as new,
           country_lang.name as cname,
-          IF(a.valid, 1, 0) badge_success,
-          (SELECT so.id_employee FROM `'._DB_PREFIX_.'personalsalesmen` so WHERE so.id_customer = a.id_customer) as personalsales
+          IF(a.valid, 1, 0) badge_success
           ';
     
           # echo $cookie->id_employee;  // SQL IF STATEMENT MAKEN VOOR CURRENT ID_EMPLOYEE EN VAN PERSONALSALES /\
@@ -102,12 +110,10 @@ class AdminOrdersController extends AdminOrdersControllerCore
           $this->_orderWay = 'DESC';
           $this->_use_found_rows = true;
         }
-
         $statuses = OrderState::getOrderStates((int)$this->context->language->id);
         foreach ($statuses as $status) {
             $this->statuses_array[$status['id_order_state']] = $status['name'];
         }
-
         $this->fields_list = array(
             'id_order' => array(
                 'title' => $this->l('ID'),
@@ -130,7 +136,6 @@ class AdminOrdersController extends AdminOrdersControllerCore
                 'havingFilter' => true,
             ),
         );
-
         if (Configuration::get('PS_B2B_ENABLE')) {
             $this->fields_list = array_merge($this->fields_list, array(
                 'company' => array(
@@ -139,7 +144,6 @@ class AdminOrdersController extends AdminOrdersControllerCore
                 ),
             ));
         }
-
         $this->fields_list = array_merge($this->fields_list, array(
             'total_paid_tax_incl' => array(
                 'title' => $this->l('Total'),
@@ -176,7 +180,6 @@ class AdminOrdersController extends AdminOrdersControllerCore
                 'remove_onclick' => true
             )
         ));
-
         if (Country::isCurrentlyUsed('country', true)) {
             $result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
             SELECT DISTINCT c.id_country, cl.`name`
@@ -186,12 +189,10 @@ class AdminOrdersController extends AdminOrdersControllerCore
             INNER JOIN `'._DB_PREFIX_.'country` c ON a.id_country = c.id_country
             INNER JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country` AND cl.`id_lang` = '.(int)$this->context->language->id.')
             ORDER BY cl.name ASC');
-
             $country_array = array();
             foreach ($result as $row) {
                 $country_array[$row['id_country']] = $row['name'];
             }
-
             $part1 = array_slice($this->fields_list, 0, 3);
             $part2 = array_slice($this->fields_list, 3);
             $part1['cname'] = array(
@@ -204,31 +205,27 @@ class AdminOrdersController extends AdminOrdersControllerCore
             );
             $this->fields_list = array_merge($part1, $part2);
         }
-
         $this->shopLinkType = 'shop';
         $this->shopShareDatas = Shop::SHARE_ORDER;
-
         if (Tools::isSubmit('id_order')) {
-            // Save context (in order to apply cart rule)
             $order = new Order((int)Tools::getValue('id_order'));
             $this->context->cart = new Cart($order->id_cart);
             $this->context->customer = new Customer($order->id_customer);
         }
-
         $this->bulk_actions = array(
             'updateOrderStatus' => array('text' => $this->l('Change Order Status'), 'icon' => 'icon-refresh')
         );
-
         AdminController::__construct();
     }
-
+    /*
+    * module: personalsalesmen
+    * date: 2016-09-21 12:51:48
+    * version: 2.3
+    */
     public function initPageHeaderToolbar()
     {
         parent::initPageHeaderToolbar();
-
         global $cookie;
-
-
             if (empty($this->display)) {
                 $this->page_header_toolbar_btn['new_order'] = array(
                     'href' => self::$currentIndex.'&addorder&token='.$this->token,
@@ -237,11 +234,9 @@ class AdminOrdersController extends AdminOrdersControllerCore
                 );
             }
     
-
         if ($this->display == 'add') {
             unset($this->page_header_toolbar_btn['save']);
         }
-
         if (Context::getContext()->shop->getContext() != Shop::CONTEXT_SHOP && isset($this->page_header_toolbar_btn['new_order'])
             && Shop::isFeatureActive()) {
             unset($this->page_header_toolbar_btn['new_order']);
