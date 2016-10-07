@@ -118,9 +118,7 @@ class AdminCustomersController extends AdminCustomersControllerCore
                 a.date_add,
                 gl.name as title,
                 (SELECT SUM(total_paid_real / conversion_rate) FROM '._DB_PREFIX_.'orders o WHERE o.id_customer = a.id_customer '.Shop::addSqlRestriction(Shop::SHARE_ORDER, 'o').' AND o.valid = 1) as total_spent,
-                (SELECT c.date_add FROM '._DB_PREFIX_.'guest g LEFT JOIN '._DB_PREFIX_.'connections c ON c.id_guest = g.id_guest WHERE g.id_customer = a.id_customer ORDER BY c.date_add DESC LIMIT 1) as connect,
-            (SELECT so.id_employee FROM `'._DB_PREFIX_.'personalsalesmen` so WHERE so.id_customer = a.id_customer) as personalsales
-            ';
+                (SELECT c.date_add FROM '._DB_PREFIX_.'guest g LEFT JOIN '._DB_PREFIX_.'connections c ON c.id_guest = g.id_guest WHERE g.id_customer = a.id_customer ORDER BY c.date_add DESC LIMIT 1) as connect            ';
             
             $this->_join = 'LEFT JOIN '._DB_PREFIX_.'gender_lang gl ON (a.id_gender = gl.id_gender AND gl.id_lang = '.(int)$this->context->language->id.')
             JOIN `'._DB_PREFIX_.'personalsalesmen` psm ON (psm.`id_employee` = '.$cookie->id_employee.' AND psm.`id_customer` = a.`id_customer`)
