@@ -58,7 +58,6 @@
 								{else}
 									{$order->total_discounts_tax_incl}
 								{/if};
-
 	var errorRefund = "{l s='Error. You cannot refund a negative amount.'}";
 	</script>
 
@@ -66,7 +65,6 @@
 	{if ($hook_invoice)}
 	<div>{$hook_invoice}</div>
 	{/if}
-
 	<div class="panel kpi-container">
 		<div class="row">
 			<div class="col-xs-6 col-sm-3 box-stats color3" >
@@ -110,7 +108,7 @@
 					<span class="badge">{$order->reference}</span>
 					<span class="badge">{l s="#"}{$order->id}</span>
 					<div class="panel-heading-action">
-						{if $employee->id==1}
+						{if ($employee->id==1 or Configuration::get('personalsalesmen') == 1) }
 						<div class="btn-group">
 							<a class="btn btn-default{if !$previousOrder} disabled{/if}" href="{$link->getAdminLink('AdminOrders')|escape:'html':'UTF-8'}&amp;vieworder&amp;id_order={$previousOrder|intval}">
 								<i class="icon-backward"></i>
@@ -123,7 +121,7 @@
 					</div>
 				</div>
 				<!-- Orders Actions -->
-				{if $employee->id==1}
+				{if ($employee->id==1 or Configuration::get('personalsalesmen') == 1) }
 				<div class="well hidden-print">
 					<a class="btn btn-default" href="javascript:window.print()">
 						<i class="icon-print"></i>
@@ -184,7 +182,7 @@
 							{l s='Status'} <span class="badge">{$history|@count}</span>
 						</a>
 					</li>
-					{if $employee->id==1}
+					{if ($employee->id==1 or Configuration::get('personalsalesmen') == 1) }
 					<li>
 						<a href="#documents">
 							<i class="icon-file-text"></i>
@@ -273,7 +271,7 @@
 				</script>
 				<hr />
 				<!-- Tab nav -->
-				{if $employee->id==1}
+				{if ($employee->id==1 or Configuration::get('personalsalesmen') == 1) }
 				<ul class="nav nav-tabs" id="myTab">
 					{$HOOK_TAB_SHIP}
 					<li class="active">
@@ -398,7 +396,7 @@
 				</script>
 			</div>
 			<!-- Payments block -->
-			{if $employee->id==1}
+			{if ($employee->id==1 or Configuration::get('personalsalesmen') == 1) }
 			<div id="formAddPaymentPanel" class="panel">
 				<div class="panel-heading">
 					<i class="icon-money"></i>
@@ -576,7 +574,7 @@
 		</div>
 		<div class="col-lg-5">
 			<!-- Customer informations -->
-			{if $employee->id==1}
+			{if ($employee->id==1 or Configuration::get('personalsalesmen') == 1) }
 			<div class="panel">
 				{if $customer->id}
 					<div class="panel-heading">
@@ -828,7 +826,7 @@
 						</div>
 					</div>
 				{/if}
-				{if $employee->id==1}
+				{if ($employee->id==1 or Configuration::get('personalsalesmen') == 1) }
 				<div id="messages" class="well hidden-print">
 					<form action="{$smarty.server.REQUEST_URI|escape:'html':'UTF-8'}&amp;token={$smarty.get.token|escape:'html':'UTF-8'}" method="post" onsubmit="if (getE('visibility').checked == true) return confirm('{l s='Do you want to send this message to the customer?'}');">
 						<div id="message" class="form-horizontal">
@@ -1322,11 +1320,9 @@
 	<script type="text/javascript">
 		var geocoder = new google.maps.Geocoder();
 		var delivery_map, invoice_map;
-
 		$(document).ready(function()
 		{
 			$(".textarea-autosize").autosize();
-
 			geocoder.geocode({
 				address: '{$addresses.delivery->address1|@addcslashes:'\''},{$addresses.delivery->postcode|@addcslashes:'\''},{$addresses.delivery->city|@addcslashes:'\''}{if isset($addresses.deliveryState->name) && $addresses.delivery->id_state},{$addresses.deliveryState->name|@addcslashes:'\''}{/if},{$addresses.delivery->country|@addcslashes:'\''}'
 				}, function(results, status) {
@@ -1347,7 +1343,6 @@
 					});
 				}
 			});
-
 			geocoder.geocode({
 				address: '{$addresses.invoice->address1|@addcslashes:'\''},{$addresses.invoice->postcode|@addcslashes:'\''},{$addresses.invoice->city|@addcslashes:'\''}{if isset($addresses.deliveryState->name) && $addresses.invoice->id_state},{$addresses.deliveryState->name|@addcslashes:'\''}{/if},{$addresses.invoice->country|@addcslashes:'\''}'
 				}, function(results, status) {
@@ -1368,7 +1363,6 @@
 					});
 				}
 			});
-
 			$('.datepicker').datetimepicker({
 				prevText: '',
 				nextText: '',
@@ -1387,7 +1381,6 @@
 				minuteText: '{l s='Minute' js=1}'
 			});
 		});
-
 		// Fix wrong maps center when map is hidden
 		$('#tabAddresses').click(function(){
 			x = delivery_map.getZoom();
@@ -1395,7 +1388,6 @@
 			google.maps.event.trigger(delivery_map, 'resize');
 			delivery_map.setZoom(x);
 			delivery_map.setCenter(c);
-
 			x = invoice_map.getZoom();
 			c = invoice_map.getCenter();
 			google.maps.event.trigger(invoice_map, 'resize');
