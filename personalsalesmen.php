@@ -4,7 +4,7 @@ class personalsalesmen extends Module {
 		$this->name = 'personalsalesmen';
         $this->author = 'inform-all.nl';
 		$this->tab = 'Other';
-		$this->version = '2.3';
+		$this->version = '2.5';
         $this->module_key = '';
         $this->dir = '/modules/personalsalesmen/';
 		parent::__construct();
@@ -63,15 +63,16 @@ class personalsalesmen extends Module {
 		if (parent::uninstall() == false) {
 			return false;
 		}
-        if ($this->psversion()==5 || $this->psversion()==5){
-    	    $id_tab = Tab::getIdFromClassName($this->tabClassName);
-        } else {
-            $id_tab = Tab::getIdFromClassName($this->tabClassName."14");    
-        }
-	    if ($id_tab) {
-	      $tab = new Tab($id_tab);
-	      $tab->delete();
-	    }
+
+        // Uninstall Tabs
+		$moduleTabs = Tab::getCollectionFromModule($this->name);
+		if (!empty($moduleTabs)) {
+			foreach ($moduleTabs as $moduleTab) {
+				$moduleTab->delete();
+			}
+		}
+
+
 		Db::getInstance()->execute('DROP TABLE '._DB_PREFIX_.'personalsalesmen');
 
 		if (is_file(dirname(__FILE__) . '/../../override/controllers/admin/templates/orders/helpers/view/view.tpl'))
@@ -107,6 +108,27 @@ class personalsalesmen extends Module {
             return $ret;
         }
 	}
+
+
+	public function getContent()
+	{
+	    $output = null;
+	 
+	    if (Tools::isSubmit('submit'.$this->name))
+	    {
+	        $my_module_name = strval(Tools::getValue('personalsalesmen'));
+	        if (!$my_module_name
+	          || empty($my_module_name)
+	          || !Validate::isGenericName($my_module_name))
+	            $output .= $this->displayError($this->l('Invalid Configuration value'));
+	        else
+	        {
+	            Configuration::updateValue('personalsalesmen', $my_module_name);
+	            $output .= $this->displayConfirmation($this->l('Settings updated'));
+	        }
+	    }
+	    return $output.$this->displayForm();
+	}
 	
 	
 	public function displayinputid($return=0){
@@ -116,7 +138,7 @@ class personalsalesmen extends Module {
 	       $verps="14";
 	   }
 
-          $resultemp= Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM `ps_employee` WHERE id_profile=4');
+          $resultemp= Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM `ps_employee`');
 
         //idemploye
         $selectemp="<select name=\"idemp\" id=\"idemp\">";
@@ -268,7 +290,7 @@ class personalsalesmen extends Module {
 				if(!Db::getInstance()->Execute($q)){$this->errorlog[] = $this->l("ERROR");}	
 			}
 
-			 elseif (($id != 0) && ($idem != 0) && ($Count==0) ){
+			 elseif (($id != 0) && ($idem != 0) ){
 				$q= 'INSERT INTO `'._DB_PREFIX_.'personalsalesmen`(`id_customer`,`id_employee`) VALUES ("'.$id.'","'.$idem.'")';
 				if(!Db::getInstance()->Execute($q)){$this->errorlog[] = $this->l("ERROR");}		
 			}
@@ -293,9 +315,82 @@ class personalsalesmen extends Module {
 	}
 
 
-	public function displayForm(){
-		return '';
-	}    
+	public function displayForm()
+	{
+	    // Get default language
+	    $default_lang = (int)Configuration::get('PS_LANG_DEFAULT');
+
+		$options = array(
+		  array(
+		    'id_option' => 1,                 // The value of the 'value' attribute of the <option> tag.
+		    'name' => 'Show'              // The value of the text content of the  <option> tag.
+		  ),
+		  array(
+		    'id_option' => 2,
+		    'name' => 'Hide'
+		  ),
+		);
+	     
+	    // Init Fields form array
+	    $fields_form[0]['form'] = array(
+	        'legend' => array(
+	            'title' => $this->l('Settings'),
+	        ), 
+			  'input' => array(       
+			    array(           
+			      'type' => 'select',
+			      'label'=> $this->l('Extra order info for Personal Employees.'),
+			      'name' => 'personalsalesmen',
+			      'options' => array(
+  				  	'query' => $options,                           
+  				  	'id' => 'id_option',                            
+  				  	'name' => 'name'                                
+  				)
+			     ),
+			  ),
+			  'submit' => array(
+			    'title' => $this->l('Save'),       
+			    'class' => 'button'   
+			  )
+			);
+	     
+	    $helper = new HelperForm();
+	     
+	    // Module, token and currentIndex
+	    $helper->module = $this;
+	    $helper->name_controller = $this->name;
+	    $helper->token = Tools::getAdminTokenLite('AdminModules');
+	    $helper->currentIndex = AdminController::$currentIndex.'&configure='.$this->name;
+	     
+	    // Language
+	    $helper->default_form_language = $default_lang;
+	    $helper->allow_employee_form_lang = $default_lang;
+	     
+	    // Title and toolbar
+	    $helper->title = $this->displayName;
+	    $helper->show_toolbar = true;        // false -> remove toolbar
+	    $helper->toolbar_scroll = true;      // yes - > Toolbar is always visible on the top of the screen.
+	    $helper->submit_action = 'submit'.$this->name;
+	    $helper->toolbar_btn = array(
+	        'save' =>
+	        array(
+	            'desc' => $this->l('Save'),
+	            'href' => AdminController::$currentIndex.'&configure='.$this->name.'&save'.$this->name.
+	            '&token='.Tools::getAdminTokenLite('AdminModules'),
+	        ),
+	        'back' => array(
+	            'href' => AdminController::$currentIndex.'&token='.Tools::getAdminTokenLite('AdminModules'),
+	            'desc' => $this->l('Back to list')
+	        )
+	    );
+	     
+	    // Load current value
+	    $helper->fields_value['personalsalesmen'] = Configuration::get('personalsalesmen');
+	     
+	    return $helper->generateForm($fields_form);
+	}
+
+
     /**
      * Copie du contenu d'un dossier vers un autre emplacement
      * @param string $dir2copy : Chemin du dossier à copier
