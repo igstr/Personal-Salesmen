@@ -99,8 +99,9 @@ class personalsalesmen extends Module {
 	}
 	
 	public function displayFooter($return=0){
-		$ret = "<div style=\"display:block; text-align:left; margin-top:5px;\">";
-		$ret.= $this->l('Developed by')." <a style=\"font-weight:bold; color:green;\" href=\"https://www.facebook.com/Inform-All-1744954845723557/\" target=\"_blank\">inform-all.nl</a><br/><br/>";
+		$ret = "<div style=\"display:block; text-align:right; margin-top:5px;\">";
+		$ret.= $this->l('proudly developed by')." <a style=\"font-weight:bold; color:green;\" href=\"http://inform-all.nl\" target=\"_blank\">Inform-All</a><br/><br/>";
+        $ret.= '<iframe src="//https://www.facebook.com/plugins/likebox.php?href=Inform-All-1744954845723557/;width=200&amp;height=62&amp;show_faces=false&amp;colorscheme=light&amp;stream=false&amp;border_color&amp;header=false&amp;appId=211918662219581" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:200px; height:62px;" allowTransparency="true"></iframe>';
 		$ret.= "</div>";
         if ($return==0){
             echo $ret;
