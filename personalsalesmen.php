@@ -139,7 +139,7 @@ class personalsalesmen extends Module {
 	       $verps="14";
 	   }
 
-          $resultemp= Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM `ps_employee`');
+          $resultemp= Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'_employee`');
 
         //idemploye
         $selectemp="<select name=\"idemp\" id=\"idemp\">";
@@ -153,7 +153,7 @@ class personalsalesmen extends Module {
 
 
 
-          $resultcustomer = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM `ps_customer`');
+          $resultcustomer = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'_customer`');
 
         //idcustomer
         $selectCustomer="<select name=\"idcus\" id=\"idcus\">";
@@ -185,10 +185,10 @@ class personalsalesmen extends Module {
           	ps.id_customer as idclient,
           	ps.firstname as nomclien ,
           	ps.lastname as nomcl2 
-          	FROM ps_personalsalesmen p
-          	INNER JOIN ps_customer ps 
+          	FROM '._DB_PREFIX_.'_personalsalesmen p
+          	INNER JOIN '._DB_PREFIX_.'_customer ps 
           	ON p.id_customer=ps.id_customer
-          	INNER JOIN ps_employee pe 
+          	INNER JOIN '._DB_PREFIX_.'_employee pe 
           	ON pe.id_employee  = p.id_employee');
 
         //idcus
@@ -282,7 +282,7 @@ class personalsalesmen extends Module {
 		$psversion=$this->psversion();
 		$idem = $_POST["idemp"];
 		$delcus = (int)$_POST["delcus"];
-		$Count = (int)Db::getInstance()->getValue('SELECT COUNT(p.id_customer) FROM ps_personalsalesmen p where p.id_customer = '.$id.' ') ;
+		$Count = (int)Db::getInstance()->getValue('SELECT COUNT(p.id_customer) FROM '._DB_PREFIX_.'_personalsalesmen p where p.id_customer = '.$id.' ') ;
 
 
 		if ($psversion==5 || $psversion==6){
