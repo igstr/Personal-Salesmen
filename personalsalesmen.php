@@ -4,7 +4,7 @@ class personalsalesmen extends Module {
 		$this->name = 'personalsalesmen';
         $this->author = 'inform-all.nl';
 		$this->tab = 'Other';
-		$this->version = '2.5';
+		$this->version = '2.6';
         $this->module_key = '';
         $this->dir = '/modules/personalsalesmen/';
 		parent::__construct();

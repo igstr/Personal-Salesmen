@@ -57,7 +57,7 @@ class AdminOrdersController extends AdminOrdersControllerCore
         $this->deleted = false;
         $this->context = Context::getContext();
         global $cookie;
-        if ($cookie->id_employee == 1)
+        if ($cookie->profile == 1)
         {
             $this->_select = '
             a.id_currency,

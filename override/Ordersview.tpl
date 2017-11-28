@@ -978,7 +978,7 @@
 						</button>
 					{/if}
 						BLAAA
-						{if $employee->id!=1}
+						{if $employee->id_profile!=1}
 						<button id="add_voucher" class="btn btn-default" type="button" >
 							<i class="icon-ticket"></i>
 							{l s='Add a new discount'}

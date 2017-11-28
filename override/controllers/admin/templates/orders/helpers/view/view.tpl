@@ -108,7 +108,7 @@
 					<span class="badge">{$order->reference}</span>
 					<span class="badge">{l s="#"}{$order->id}</span>
 					<div class="panel-heading-action">
-						{if ($employee->id==1 or Configuration::get('personalsalesmen') == 1) }
+						{if ($employee->id_profile==1 or Configuration::get('personalsalesmen') == 1) }
 						<div class="btn-group">
 							<a class="btn btn-default{if !$previousOrder} disabled{/if}" href="{$link->getAdminLink('AdminOrders')|escape:'html':'UTF-8'}&amp;vieworder&amp;id_order={$previousOrder|intval}">
 								<i class="icon-backward"></i>
@@ -121,7 +121,7 @@
 					</div>
 				</div>
 				<!-- Orders Actions -->
-				{if ($employee->id==1 or Configuration::get('personalsalesmen') == 1) }
+				{if ($employee->id_profile==1 or Configuration::get('personalsalesmen') == 1) }
 				<div class="well hidden-print">
 					<a class="btn btn-default" href="javascript:window.print()">
 						<i class="icon-print"></i>
@@ -182,7 +182,7 @@
 							{l s='Status'} <span class="badge">{$history|@count}</span>
 						</a>
 					</li>
-					{if ($employee->id==1 or Configuration::get('personalsalesmen') == 1) }
+					{if ($employee->id_profile==1 or Configuration::get('personalsalesmen') == 1) }
 					<li>
 						<a href="#documents">
 							<i class="icon-file-text"></i>
@@ -271,7 +271,7 @@
 				</script>
 				<hr />
 				<!-- Tab nav -->
-				{if ($employee->id==1 or Configuration::get('personalsalesmen') == 1) }
+				{if ($employee->id_profile==1 or Configuration::get('personalsalesmen') == 1) }
 				<ul class="nav nav-tabs" id="myTab">
 					{$HOOK_TAB_SHIP}
 					<li class="active">
@@ -396,7 +396,7 @@
 				</script>
 			</div>
 			<!-- Payments block -->
-			{if ($employee->id==1 or Configuration::get('personalsalesmen') == 1) }
+			{if ($employee->id_profile==1 or Configuration::get('personalsalesmen') == 1) }
 			<div id="formAddPaymentPanel" class="panel">
 				<div class="panel-heading">
 					<i class="icon-money"></i>
@@ -574,7 +574,7 @@
 		</div>
 		<div class="col-lg-5">
 			<!-- Customer informations -->
-			{if ($employee->id==1 or Configuration::get('personalsalesmen') == 1) }
+			{if ($employee->id_profile==1 or Configuration::get('personalsalesmen') == 1) }
 			<div class="panel">
 				{if $customer->id}
 					<div class="panel-heading">
@@ -826,7 +826,7 @@
 						</div>
 					</div>
 				{/if}
-				{if ($employee->id==1 or Configuration::get('personalsalesmen') == 1) }
+				{if ($employee->id_profile==1 or Configuration::get('personalsalesmen') == 1) }
 				<div id="messages" class="well hidden-print">
 					<form action="{$smarty.server.REQUEST_URI|escape:'html':'UTF-8'}&amp;token={$smarty.get.token|escape:'html':'UTF-8'}" method="post" onsubmit="if (getE('visibility').checked == true) return confirm('{l s='Do you want to send this message to the customer?'}');">
 						<div id="message" class="form-horizontal">
@@ -987,7 +987,7 @@
 							{l s='Add a product'}
 						</button>
 					{/if}
-					{if $employee->id == 1}
+					{if $employee->id_profile == 1}
 						<button id="add_voucher" class="btn btn-default" type="button" >
 							<i class="icon-ticket"></i>
 							{l s='Add a new discount'}
