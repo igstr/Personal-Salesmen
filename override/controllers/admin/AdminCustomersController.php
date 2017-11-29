@@ -95,7 +95,10 @@ class AdminCustomersController extends AdminCustomersControllerCore
             $titles_array[$gender->id_gender] = $gender->name;
         }
         global $cookie;
-        if ($cookie->profile == 1)
+        $context = Context::getContext();
+        $profileID = $context->employee->id_profile;
+
+        if ($profileID == 1)
         {
             $this->_select = '
             a.date_add, gl.name as title, (
@@ -228,7 +231,7 @@ class AdminCustomersController extends AdminCustomersControllerCore
     {
         global $cookie;
         $CustRay = array();
-        if ($cookie->profile == 1){
+        if ($profileID == 1){
             $sql = 'SELECT * FROM '._DB_PREFIX_.'personalsalesmen';
         }else{
             $sql = 'SELECT * FROM '._DB_PREFIX_.'personalsalesmen WHERE id_employee = '.$cookie->id_employee.'';
@@ -237,7 +240,7 @@ class AdminCustomersController extends AdminCustomersControllerCore
             foreach ($Listresults as $row)
                 array_push($CustRay, $row['id_customer']);
         
-        if ($cookie->profile == 1){
+        if ($profileID == 1){
         #if(count($CustRay) > 1){
             $searches = explode(' ', Tools::getValue('customer_search'));
             $customers = array();
