@@ -139,7 +139,7 @@ class personalsalesmen extends Module {
 	       $verps="14";
 	   }
 
-          $resultemp= Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'_employee`');
+          $resultemp= Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'employee`');
 
         //idemploye
         $selectemp="<select name=\"idemp\" id=\"idemp\">";
@@ -153,7 +153,7 @@ class personalsalesmen extends Module {
 
 
 
-          $resultcustomer = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'_customer`');
+        $resultcustomer = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'customer`');
 
         //idcustomer
         $selectCustomer="<select name=\"idcus\" id=\"idcus\">";
