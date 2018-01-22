@@ -185,10 +185,10 @@ class personalsalesmen extends Module {
           	ps.id_customer as idclient,
           	ps.firstname as nomclien ,
           	ps.lastname as nomcl2 
-          	FROM '._DB_PREFIX_.'_personalsalesmen p
-          	INNER JOIN '._DB_PREFIX_.'_customer ps 
+          	FROM '._DB_PREFIX_.'personalsalesmen  p
+          	INNER JOIN '._DB_PREFIX_.'customer ps 
           	ON p.id_customer=ps.id_customer
-          	INNER JOIN '._DB_PREFIX_.'_employee pe 
+          	INNER JOIN '._DB_PREFIX_.'employee pe 
           	ON pe.id_employee  = p.id_employee');
 
         //idcus
