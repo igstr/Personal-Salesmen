@@ -282,7 +282,7 @@ class personalsalesmen extends Module {
 		$psversion=$this->psversion();
 		$idem = $_POST["idemp"];
 		$delcus = (int)$_POST["delcus"];
-		$Count = (int)Db::getInstance()->getValue('SELECT COUNT(p.id_customer) FROM '._DB_PREFIX_.'_personalsalesmen p where p.id_customer = '.$id.' ') ;
+		$Count = (int)Db::getInstance()->getValue('SELECT COUNT(p.id_customer) FROM '._DB_PREFIX_.'personalsalesmen p where p.id_customer = '.$id.' ') ;
 
 
 		if ($psversion==5 || $psversion==6){
