@@ -230,6 +230,8 @@ class AdminCustomersController extends AdminCustomersControllerCore
     public function ajaxProcessSearchCustomers()
     {
         global $cookie;
+        $context = Context::getContext();
+        $profileID = $context->employee->id_profile;
         $CustRay = array();
         if ($profileID == 1){
             $sql = 'SELECT * FROM '._DB_PREFIX_.'personalsalesmen';
